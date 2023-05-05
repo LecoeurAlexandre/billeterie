@@ -18,6 +18,8 @@ public abstract class baseDAO<T> {
         _connection = connection;
     }
     public abstract boolean save(T element) throws ExecutionControl.NotImplementedException, SQLException;
+
+    public abstract boolean delete(T element) throws ExecutionControl.NotImplementedException, SQLException;
     public abstract T getById(int id) throws ExecutionControl.NotImplementedException, SQLException;
 
     public abstract List<T> getAll() throws ExecutionControl.NotImplementedException, SQLException;

@@ -22,7 +22,7 @@ public class Ihm {
     public void menu() {
 
         //Affichage du menu
-        String choises[] = {"1- Ajouter, modifier ou supprimer un lieu", "2- Ajouter, modifier ou supprimer un événement", "3- Ajouter, modifier ou supprimer un client", "4- Acheter un billet", "5- Annuler un achat de billet", "6- Afficher la liste des événements disponibles ", "6- Afficher la liste des billets achetés par un client ", "0- Quitter"};
+        String choises[] = {"1- Ajouter, modifier ou supprimer un lieu", "2- Ajouter, modifier ou supprimer un événement", "3- Ajouter, modifier ou supprimer un client", "4- Acheter un billet", "5- Annuler un achat de billet", "6- Afficher la liste des événements disponibles ", "7- Afficher la liste des billets achetés par un client ", "0- Quitter"};
         System.out.println("Bienvenue sur le service de réservations");
         for (String c : choises) {
             System.out.println(c);
@@ -44,17 +44,7 @@ public class Ihm {
                     case 2:
 
                     case 3:
-                        System.out.println("Veuillez saisir le nom du lieu");
-                        String placeNameForDelete = sc.nextLine();
-                        System.out.println("Veuillez saisir le nom du lieu");
-                        String placeAddressForDelete = sc.nextLine();
-                        for (int i = 0; i < allPlaces.size(); i++) {
-                            if(allPlaces.get(i).getName().equals(placeNameForDelete) & allPlaces.get(i).getAddress().equals(placeAddressForDelete)) {
-                                allPlaces.remove(allPlaces.get(i));
-                                System.out.println(placeNameForDelete +" de "+ placeAddressForDelete + " a été supprimé");
-                            }
-                        }
-                        System.out.println(allPlaces.toString());
+                        deletePlaceAction();
                         menu();
 
                 }
@@ -82,5 +72,29 @@ public class Ihm {
             throw new RuntimeException(e);
         }
         return place;
+    }
+    private void deletePlaceAction () {
+        Place place = null;
+        System.out.println("Veuillez saisir l'id du lieu à supprimer");
+        int deletePlaceId = sc.nextInt();
+        sc.nextLine();
+        try {
+            connection = new DataBaseManager().getConnection();
+            placeDao = new PlaceDao(connection);
+            place = placeDao.getById(deletePlaceId);
+            if(place !=null) {
+                if(placeDao.delete(place)) {
+                    System.out.println("Lieu supprimé");
+                }
+            }
+            else {
+                System.out.println("Aucun lieu avec cet id");
+            }
+            } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        } catch (ExecutionControl.NotImplementedException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

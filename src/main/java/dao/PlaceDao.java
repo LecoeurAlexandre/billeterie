@@ -28,8 +28,25 @@ public class PlaceDao extends baseDAO<Place>{
     }
 
     @Override
+    public boolean delete(Place element) throws ExecutionControl.NotImplementedException, SQLException {
+        request = "DELETE FROM place where id = ?";
+        statement = _connection.prepareStatement(request, Statement.RETURN_GENERATED_KEYS);
+        statement.setInt(1, element.getId());
+        int rowNb =statement.executeUpdate();
+        return rowNb > 0;
+    }
+
+    @Override
     public Place getById(int id) throws ExecutionControl.NotImplementedException, SQLException {
-        return null;
+        Place place = null;
+        request = "SELECT * FROM place WHERE id = ?";
+        statement = _connection.prepareStatement(request);
+        statement.setInt(1, id);
+        resultSet = statement.executeQuery();
+        if (resultSet.next()){
+            place = new Place(resultSet.getInt("id"), resultSet.getString("name"),resultSet.getString("address"),resultSet.getInt("capacity"));
+        }
+        return place;
     }
 
     @Override
