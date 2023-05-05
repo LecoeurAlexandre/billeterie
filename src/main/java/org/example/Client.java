@@ -6,13 +6,11 @@ public class Client {
     private String lastName;
     private String firstName;
     private String email;
-    private ArrayList<Event> eventTickets;
 
-    public Client(String lastName, String firstName, String email, ArrayList<Event> eventTickets) {
+    public Client(String lastName, String firstName, String email) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
-        this.eventTickets = eventTickets;
     }
 
     public String getLastName() {
@@ -39,13 +37,6 @@ public class Client {
         this.email = email;
     }
 
-    public ArrayList<Event> getEventTickets() {
-        return eventTickets;
-    }
-
-    public void setEventTickets(ArrayList<Event> eventTickets) {
-        this.eventTickets = eventTickets;
-    }
 
     @Override
     public String toString() {
@@ -53,7 +44,6 @@ public class Client {
                 "lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", email='" + email + '\'' +
-                ", eventTickets=" + eventTickets +
                 '}';
     }
 }

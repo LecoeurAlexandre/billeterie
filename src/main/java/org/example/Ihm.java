@@ -1,13 +1,25 @@
 package org.example;
 
+import dao.PlaceDao;
+import jdk.jshell.spi.ExecutionControl;
+import utils.DataBaseManager;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Ihm {
-    static Scanner sc = new Scanner(System.in);
+    Scanner sc;
     static List<Place> allPlaces = new ArrayList<>();
-    public static void menu() {
+    private Connection connection;
+    private PlaceDao placeDao;
+
+    public Ihm() {
+        sc = new Scanner(System.in);
+    }
+    public void menu() {
 
         //Affichage du menu
         String choises[] = {"1- Ajouter, modifier ou supprimer un lieu", "2- Ajouter, modifier ou supprimer un événement", "3- Ajouter, modifier ou supprimer un client", "4- Acheter un billet", "5- Annuler un achat de billet", "6- Afficher la liste des événements disponibles ", "6- Afficher la liste des billets achetés par un client ", "0- Quitter"};
@@ -27,22 +39,15 @@ public class Ihm {
                 int choiceActionPlace = sc.nextInt();
                 switch (choiceActionPlace) {
                     case 1:
-                        System.out.println("Veuillez saisir le nom du lieu");
-                        String placeName = sc.next();
-                        System.out.println("Veuillez saisir l'adresse");
-                        String placeAddress = sc.next();
-                        System.out.println("Veuillez saisir la capacité");
-                        int placeCapacity = sc.nextInt();
-                        allPlaces.add(new Place(placeName, placeAddress, placeCapacity));
-                        System.out.println(allPlaces.toString());
+                        createPlaceAction();
                         menu();
                     case 2:
 
                     case 3:
                         System.out.println("Veuillez saisir le nom du lieu");
-                        String placeNameForDelete = sc.next();
+                        String placeNameForDelete = sc.nextLine();
                         System.out.println("Veuillez saisir le nom du lieu");
-                        String placeAddressForDelete = sc.next();
+                        String placeAddressForDelete = sc.nextLine();
                         for (int i = 0; i < allPlaces.size(); i++) {
                             if(allPlaces.get(i).getName().equals(placeNameForDelete) & allPlaces.get(i).getAddress().equals(placeAddressForDelete)) {
                                 allPlaces.remove(allPlaces.get(i));
@@ -55,4 +60,27 @@ public class Ihm {
                 }
         }
     };
+    private Place createPlaceAction () {
+        Place place = null;
+        System.out.println("Veuillez saisir le nom du lieu");
+        String placeName = sc.next();
+        System.out.println("Veuillez saisir l'adresse");
+        String placeAddress = sc.next();
+        System.out.println("Veuillez saisir la capacité");
+        int placeCapacity = sc.nextInt();
+        sc.nextLine();
+        place = new Place(placeName, placeAddress, placeCapacity);
+        try {
+            connection = new DataBaseManager().getConnection();
+            placeDao = new PlaceDao(connection);
+            if(placeDao.save(place)) {
+                System.out.println("Lieu ajouté "+ place.getId());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionControl.NotImplementedException e) {
+            throw new RuntimeException(e);
+        }
+        return place;
+    }
 }
