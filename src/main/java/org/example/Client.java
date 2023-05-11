@@ -3,6 +3,7 @@ package org.example;
 import java.util.ArrayList;
 
 public class Client {
+    private int id;
     private String lastName;
     private String firstName;
     private String email;
@@ -11,6 +12,21 @@ public class Client {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
+    }
+
+    public Client(int id, String lastName, String firstName, String email) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getLastName() {

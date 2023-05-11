@@ -55,7 +55,14 @@ public class PlaceDao extends baseDAO<Place>{
     }
 
     @Override
-    public boolean update(Place element) throws ExecutionControl.NotImplementedException, SQLException {
-        return false;
+    public boolean update(Place place) throws ExecutionControl.NotImplementedException, SQLException {
+        request = "UPDATE place set name = ?, address = ?, capacity = ? WHERE id = ?";
+        statement = _connection.prepareStatement(request, Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1, place.getName());
+        statement.setString(2, place.getAddress());
+        statement.setInt(3, place.getCapacity());
+        statement.setInt(4, place.getId());
+        int nbRow = statement.executeUpdate();
+        return nbRow == 1;
     }
 }
